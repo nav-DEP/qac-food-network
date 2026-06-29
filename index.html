@@ -14,6 +14,7 @@
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
   button{font-family:inherit;cursor:pointer}
+  button:disabled{opacity:.55;cursor:default}
   a{color:var(--blue)}
 
   /* ===== sign-in gate ===== */
@@ -591,9 +592,11 @@ function renderTopicsMenu(){
 function setTopic(k){curTopic=k;renderTopicsMenu();renderPosts();}
 async function addPost(){
   const ta=document.getElementById('ctext'); const txt=ta.value.trim(); if(!txt)return;
-  const topic=document.getElementById('ctopic').value; ta.disabled=true;
+  const topic=document.getElementById('ctopic').value;
+  const btn=document.querySelector('.composer .post'); const orig=btn?btn.textContent:'';
+  ta.disabled=true; if(btn){btn.disabled=true;btn.textContent='Posting…';}
   let ok=false; try{ const r=await postAction({action:'addComment',topic,tag:tagToSheet(curTag),message:txt}); ok=r&&r.ok; }catch(e){}
-  ta.disabled=false;
+  ta.disabled=false; if(btn){btn.disabled=false;btn.textContent=orig||'Post';}
   if(ok){ ta.value=''; if(curTopic==='__archived')curTopic='all'; await refreshComments(); }
   else { alert('Could not post your comment. Your sign-in may have expired — please refresh and try again.'); }
 }
@@ -634,9 +637,11 @@ function findPost(id){return POSTS.find(p=>String(p.id)===String(id));}
 function toggleReply(id){const el=document.getElementById('rb'+id);if(el)el.classList.toggle('open');}
 async function addReply(id){
   const inp=document.getElementById('ri'+id); const v=inp.value.trim(); if(!v)return;
-  const p=findPost(id); inp.disabled=true;
+  const p=findPost(id); const box=document.getElementById('rb'+id); const btn=box?box.querySelector('button'):null; const orig=btn?btn.textContent:'';
+  inp.disabled=true; if(btn){btn.disabled=true;btn.textContent='Sending…';}
   let ok=false; try{ const r=await postAction({action:'addReply',parentId:id,message:v,topic:p?p.topic:''}); ok=r&&r.ok; }catch(e){}
-  inp.disabled=false; if(ok) await refreshComments();
+  inp.disabled=false; if(btn){btn.disabled=false;btn.textContent=orig||'Send';}
+  if(ok) await refreshComments(); else alert('Could not post your reply. Please refresh and try again.');
 }
 async function toggleArchive(id){
   const p=findPost(id); const status=(p&&p.archived)?'active':'archived';
