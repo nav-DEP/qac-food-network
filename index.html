@@ -30,30 +30,35 @@
 
   /* ===== app shell ===== */
   #app{display:none}
-  header.app{background:var(--navy);color:#fff;display:flex;align-items:center;gap:14px;padding:12px 22px}
-  header .mark{width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
+  header.app{position:sticky;top:0;z-index:40;background:linear-gradient(115deg,var(--navy) 0%,#2f5e9c 60%,var(--teal) 140%);color:#fff;display:flex;align-items:center;gap:14px;padding:14px 22px 14px 168px;border-bottom:3px solid var(--gold)}
+  header .mark{position:absolute;left:24px;top:8px;width:124px;height:124px;border-radius:50%;background:#fff;border:4px solid #fff;box-shadow:0 10px 24px rgba(20,60,107,.30);display:flex;align-items:center;justify-content:center;z-index:45;overflow:hidden}
+  header .mark a{display:block;width:100%;height:100%}
   header .title{line-height:1.2}
-  header .title b{font-size:16px;display:block}
-  header .title span{font-size:12px;color:#bcd2ec}
+  header .title b{font-size:23px;display:block;font-weight:800;letter-spacing:.2px}
+  header .title span{font-size:14px;color:#cfe0f3}
   header .spacer{flex:1}
   .userbox{font-size:12px;text-align:right;color:#dce8f6}
   .userbox b{color:#fff}
   .signout{margin-top:4px;background:transparent;border:1px solid #6f93bd;color:#dce8f6;border-radius:6px;padding:3px 9px;font-size:11px}
   .signout:hover{background:#1d4d80}
 
-  .tabs{display:flex;gap:4px;background:#10325a;padding:0 18px}
-  .tab{background:transparent;border:0;color:#bcd2ec;padding:12px 18px;font-size:14px;font-weight:600;border-bottom:3px solid transparent}
-  .tab.active{color:#fff;border-bottom-color:var(--gold)}
-  .tab:hover{color:#fff}
+  .tabs{display:flex;justify-content:center;gap:12px;background:linear-gradient(180deg,#ffffff,#eef4fb);padding:20px 18px 16px;border-bottom:1px solid var(--line)}
+  .tab{display:inline-flex;align-items:center;gap:9px;background:#fbe7d4;border:1px solid #f0c89e;color:#9a5316;padding:12px 30px;font-size:14.5px;font-weight:700;border-radius:999px;box-shadow:0 1px 2px rgba(0,0,0,.06);transition:all .15s}
+  .tab .tabic{font-size:16px;line-height:1}
+  .tab:hover{background:#f8dbbf;transform:translateY(-1px)}
+  .tab.active{background:linear-gradient(135deg,#e8943f,#d87830);color:#fff;border-color:transparent;box-shadow:0 8px 18px rgba(216,120,48,.42)}
 
   .wrap{max-width:1180px;margin:0 auto;padding:18px}
   .view{display:none}
   .view.active{display:block}
 
-  .stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 16px;box-shadow:var(--shadow)}
-  .stat b{font-size:20px;color:var(--navy);display:block;line-height:1}
-  .stat span{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .stats{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+  .stat{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--navy);border-radius:12px;padding:12px 18px;box-shadow:var(--shadow)}
+  .stat.s-teal{border-left-color:var(--teal)} .stat.s-gold{border-left-color:var(--gold)}
+  .stat .si{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;background:var(--sky);color:var(--navy)}
+  .stat.s-teal .si{background:#e3f6f2} .stat.s-gold .si{background:#fdf2d9}
+  .stat b{font-size:22px;color:var(--navy);display:block;line-height:1}
+  .stat span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
 
   .maprow{display:grid;grid-template-columns:1fr 320px;gap:16px}
   @media(max-width:880px){.maprow{grid-template-columns:1fr}}
@@ -73,13 +78,19 @@
   .edge{stroke:#c2cedd;stroke-width:1.4}
   .edge.active{stroke:var(--blue);stroke-width:2.6}
   .edge.dim{stroke:#e2e8f0;opacity:.5}
-  .node circle{stroke:#fff;stroke-width:2.5;cursor:pointer;transition:opacity .15s}
+  .node circle{stroke:#fff;stroke-width:2.5;cursor:pointer;transition:opacity .15s;filter:drop-shadow(0 2px 3px rgba(20,60,107,.22))}
   .node text{font-size:11px;fill:#33414e;pointer-events:none;font-weight:600}
   .node.dim{opacity:.25}
   .node.sel circle{stroke:var(--navy);stroke-width:4}
 
   .detail{padding:0}
-  .detail .empty{padding:26px 18px;color:var(--muted);font-size:13px;text-align:center}
+  .detail .empty{margin:16px;padding:26px 20px;text-align:center;border-radius:16px;
+    background:linear-gradient(160deg,#eafaf7 0%,#eef3fb 100%);border:1px dashed #a9d4cc}
+  .detail .empty .ic{width:54px;height:54px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;
+    font-size:26px;color:#fff;background:linear-gradient(135deg,var(--teal),var(--blue));box-shadow:0 8px 20px rgba(44,156,143,.4)}
+  .detail .empty h4{margin:0 0 8px;color:var(--navy);font-size:17px;font-weight:800}
+  .detail .empty p{margin:0;color:#51616e;font-size:13.5px;line-height:1.6}
+  .detail .empty p b{color:var(--teal)}
   .dhead{padding:16px 16px 12px;border-bottom:1px solid var(--line)}
   .pill{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:20px;padding:3px 10px;margin-bottom:8px}
   .dhead h3{margin:0;font-size:17px;color:var(--navy)}
@@ -159,6 +170,10 @@
   .modbtn.del:hover{color:var(--red)}
   .modflag{font-size:10.5px;font-weight:700;color:#7a5a00;background:#fff3d6;border:1px solid #f0d68a;border-radius:20px;padding:3px 9px;white-space:nowrap}
   .emptyposts{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:30px;text-align:center;color:var(--muted);font-size:13px}
+  .appfooter{text-align:center;color:#cdd9ea;font-size:11.5px;line-height:1.6;padding:22px 16px 30px;background:var(--navy);border-top:3px solid var(--gold);margin-top:26px}
+  .appfooter b{color:#fff}
+  .appfooter a{color:#ffd98a;font-weight:600;text-decoration:none}
+  .appfooter a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -177,14 +192,14 @@
 <!-- ===== APP ===== -->
 <div id="app">
   <header class="app">
-    <div class="mark"><img src="qac-logo.webp" alt="QAC LMB"></div>
+    <div class="mark"><a href="https://www.communitypartnerships.info/" target="_blank" rel="noopener" title="Queen Anne&rsquo;s County Community Partnerships"><img src="qac-logo.webp" alt="QAC LMB"></a></div>
     <div class="title"><b>Food Network Dashboard</b><span>Queen Anne&rsquo;s County Community Partnerships</span></div>
     <div class="spacer"></div>
     <div class="userbox" id="userbox"></div>
   </header>
   <div class="tabs">
-    <button class="tab active" id="tab-map" onclick="showTab('map')">Network Map</button>
-    <button class="tab" id="tab-board" onclick="showTab('board')">Comment Board</button>
+    <button class="tab active" id="tab-map" onclick="showTab('map')"><span class="tabic">&#128506;</span>Network Map</button>
+    <button class="tab" id="tab-board" onclick="showTab('board')"><span class="tabic">&#128172;</span>Comment Board</button>
   </div>
 
   <div class="wrap">
@@ -209,7 +224,11 @@
           <svg id="net" viewBox="0 0 1300 880" preserveAspectRatio="xMidYMid meet"></svg>
         </div>
         <div class="panelcard detail" id="detail">
-          <div class="empty">Click any organization in the map to see what it does, who it serves, and its partners. Click a partner to web out from there.</div>
+          <div class="empty">
+            <div class="ic">&#128269;</div>
+            <h4>Explore the network</h4>
+            <p>Click any organization to see what it does, who it serves, and its partners — then click a partner to <b>web out</b> from there.</p>
+          </div>
         </div>
       </div>
       <div class="panelcard" id="tablemode" style="display:none">
@@ -249,6 +268,10 @@
       </div>
     </div>
   </div>
+  <footer class="appfooter">
+    &copy; 2026 <b>Due East Partners</b>. Proprietary tool &mdash; for authorized Queen Anne&rsquo;s County Community Partnerships use only. All rights reserved.<br>
+    <a href="https://www.dueeastpartners.com" target="_blank" rel="noopener">dueeastpartners.com</a>
+  </footer>
 </div>
 
 <script>
@@ -488,7 +511,7 @@ function selectNode(id){
 }
 function resetView(){ selected=null; applyHighlight(); resetZoom();
   document.getElementById('search').value='';
-  document.getElementById('detail').innerHTML='<div class="empty">Click any organization in the map to see what it does, who it serves, and its partners. Click a partner to web out from there.</div>';
+  document.getElementById('detail').innerHTML='<div class="empty"><div class="ic">&#128269;</div><h4>Explore the network</h4><p>Click any organization to see what it does, who it serves, and its partners — then click a partner to <b>web out</b> from there.</p></div>';
 }
 function onSearch(){
   const q=document.getElementById('search').value.trim().toLowerCase(); if(!q)return;
@@ -540,9 +563,9 @@ function toggleType(t){
 function buildStats(){
   const counts={}; NODES.forEach(n=>counts[n.type]=(counts[n.type]||0)+1);
   document.getElementById('stats').innerHTML=`
-    <div class="stat"><b>${NODES.length}</b><span>Partners</span></div>
-    <div class="stat"><b>${EDGES.length}</b><span>Connections</span></div>
-    <div class="stat"><b>${Object.keys(counts).length}</b><span>Partner types</span></div>`;
+    <div class="stat s-navy"><span class="si">&#127970;</span><div><b>${NODES.length}</b><span>Partners</span></div></div>
+    <div class="stat s-teal"><span class="si">&#128279;</span><div><b>${EDGES.length}</b><span>Connections</span></div></div>
+    <div class="stat s-gold"><span class="si">&#127991;</span><div><b>${Object.keys(counts).length}</b><span>Partner types</span></div></div>`;
 }
 
 /* ---------------- map / table toggle ---------------- */
