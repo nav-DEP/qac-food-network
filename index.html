@@ -283,7 +283,7 @@ const CONFIG = {
 
 /* ---------------- state ---------------- */
 let TYPES={}, NODES=[], EDGES=[], TOPICS=[], POSTS=[], byId={}, adj={};
-let idToken=null, isAdmin=false;
+let idToken=null, isAdmin=false, canPost=true;
 let selected=null; const hidden=new Set(); let edgeEls=[], nodeEls={};
 let curTag='offer', curTopic='all';
 const TAGLABEL={offer:'Offering',need:'Need',update:'Update'};
@@ -396,14 +396,17 @@ function buildPOSTS(rows){
 function startApp(data){
   buildTypes(data.types||[]); buildNodes(data.partners||[]); buildEdges(data.connections||[]); buildModel();
   TOPICS=buildTopics(data.topics||[]); buildPOSTS(data.comments||[]);
-  isAdmin = !!(data.user && String(data.user.role).toLowerCase()==='admin');
+  const role=(data.user && String(data.user.role||'').toLowerCase().trim())||'partner';
+  isAdmin = role==='admin'; canPost = role!=='viewer';
   document.getElementById('gate').style.display='none';
   document.getElementById('app').style.display='block';
   const u=data.user||{};
-  document.getElementById('userbox').innerHTML='<b>'+esc(u.name||u.email||'Signed in')+'</b><br>'+(isAdmin?'LMB Admin':'Partner')+'<br><button class="signout" onclick="signOut()">Sign out</button>';
+  const roleLabel = isAdmin?'LMB Admin':(role==='viewer'?'Viewer (read-only)':'Partner');
+  document.getElementById('userbox').innerHTML='<b>'+esc(u.name||u.email||'Signed in')+'</b><br>'+roleLabel+'<br><button class="signout" onclick="signOut()">Sign out</button>';
   layout(); buildGraph(); buildLegend(); buildStats();
   populateTopicSelect(); renderTopicsMenu(); renderPosts(); setMapView('map');
   if(isAdmin){ document.getElementById('modflag').style.display=''; document.getElementById('savelayout').style.display=''; }
+  if(!canPost){ var comp=document.querySelector('.composer'); if(comp) comp.style.display='none'; }
 }
 
 /* ---------------- graph: connections ---------------- */
@@ -644,7 +647,7 @@ function renderPosts(){
       <div class="text">${esc(p.text)}</div>
       ${p.replies.length?`<div class="replies">${p.replies.map(r=>`<div class="reply"><b>${esc(r.who)}</b><span class="t">${esc(r.t)}</span><br>${esc(r.text)}</div>`).join('')}</div>`:''}
       <div class="actions">
-        <button class="replybtn" onclick="toggleReply('${esc(p.id)}')">Reply</button>
+        ${canPost?`<button class="replybtn" onclick="toggleReply('${esc(p.id)}')">Reply</button>`:'<span></span>'}
         ${isAdmin?`<div class="modtools">
           <button class="modbtn" onclick="toggleArchive('${esc(p.id)}')">${p.archived?'Restore':'Archive'}</button>
           <button class="modbtn del" onclick="deletePost('${esc(p.id)}')">Delete</button>
